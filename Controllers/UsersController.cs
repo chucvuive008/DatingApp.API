@@ -31,8 +31,9 @@ namespace DatingApp.API.Controllers
 
             return Ok(usersToReturn);
         }
-
-        [HttpGet("{id}")]
+        
+        // Name= "GetUser" will be use in the Register method in AuthController when we return CreatedAtRoute
+        [HttpGet("{id}", Name="GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await _repo.GetUser(id);

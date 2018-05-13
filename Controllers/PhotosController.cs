@@ -30,7 +30,7 @@ namespace DatingApp.API.Controllers
             _repo = repo;
             _mapper = mapper;
             _cloudinaryConfig = CloudinaryConfig;
-
+            //Account model from cloudinary
             Account acc = new Account(
                 _cloudinaryConfig.Value.CloudName,
                 _cloudinaryConfig.Value.ApiKey,
@@ -50,6 +50,7 @@ namespace DatingApp.API.Controllers
             return Ok(photo);
         }
 
+        //
         [HttpPost]
         public async Task<IActionResult> AddPhotoForUser(int userId, PhotoForCreationDto photoDto)
         {
@@ -64,11 +65,14 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
 
             var file = photoDto.File;
-
+            //ImageUploadResult is model from cloudinary also
             var uploadResult = new ImageUploadResult();
 
             if(file.Length > 0)
             {
+                //within the using statement the object can only read, it can not be assigned or modified
+                //Using statement provide a convenient syntax the ensures the correct use of IDisposable object
+                //unmanaged resources such as window handles, or open files and streams.
                 using (var stream = file.OpenReadStream())
                 {
                     var uploadParams = new ImageUploadParams()
@@ -92,6 +96,8 @@ namespace DatingApp.API.Controllers
 
             user.Photos.Add(photo);
 
+            //if have any to save to database. then map the photo model to PhotoForReturn.
+            //create a new route for client to call. the model to return to client side is PhotoForReturnDto
             if (await _repo.SaveAll())
             {
                 var photoToReturn = _mapper.Map<PhotoForReturnDto>(photo);
@@ -104,6 +110,7 @@ namespace DatingApp.API.Controllers
         [HttpPost("{id}/setMain")]
         public async Task<IActionResult> SetMainPhoto(int userId, int id)
         {
+            //campare the userId that pass from uri and userId from the token
             if(userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 

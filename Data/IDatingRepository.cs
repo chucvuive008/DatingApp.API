@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DatingApp.API.Helpers;
 using DatingApp.API.Models;
 
+//this interface use to retrieve data from the database
+//it will get user info like photo, user profile include date of birth, intertest
 namespace DatingApp.API.Data
 {
     public interface IDatingRepository
@@ -12,7 +15,7 @@ namespace DatingApp.API.Data
 
          Task<bool> SaveAll();
 
-         Task<IEnumerable<User>> GetUsers();
+         Task<PagedList<User>> GetUsers(UserParams userParams);
          
          Task<User> GetUser(int id);
 

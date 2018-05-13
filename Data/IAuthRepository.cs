@@ -4,6 +4,7 @@ using DatingApp.API.Models;
 
 namespace DatingApp.API.Data
 {
+    //Use to retrieve data from databse to deal with user Authentication
     public interface IAuthRepository
     {
          Task<User> Register(User user, string password);
